@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Header from './Components/Header/header';
-import Navbar from './Components/Navbar/Navbar';
+import Navbar from './Components/Sidebar/Sidebar';
 // import InputProduct from './Components/Products/inputProduct';
 // import ListProduct from './Components/Products/ListProduct';
 import Home from './Components/Home/Home'
@@ -20,12 +20,12 @@ import EditProduct from './Components/Products/EditProduct';
 
 function App() {
   return (
-    <div className="container-fluid">
+    <div className="container-fluid ">
       <Router>
-        <div className="row vh-100" >
+        <div className="row vh-100 " >
           <Navbar />
           <div className="col   border container-fluid   " >
-            <div className="row" >
+            <div className="row " >
               <Header />
               <div className=" vh-100" >
                 <Router>

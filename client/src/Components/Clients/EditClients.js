@@ -10,8 +10,6 @@ const EditClients = (props) => {
     const [user, setuser] = useState("");
 
     // Show user
-
-    // Show database 
     const getUser = async () => {
         try {
             const response = await fetch(`http://localhost:5000/users/${user_id}`);
@@ -24,18 +22,24 @@ const EditClients = (props) => {
         }
     }
 
-    const [firstName, setfirstName] = useState(user.firstname);
-    const [lastName, setlastName] = useState(user.lastname);
-    const [email, setemail] = useState(user.email);
-    const [age, setage] = useState(user.age);
-    // console.log(user.firstname);
+    useEffect(() => {
+        getUser();
+    }, []);
+
+    const [firstName, setfirstName] = useState("");
+    const [lastName, setlastName] = useState("");
+    const [email, setemail] = useState("");
+    const [age, setage] = useState("");
+
+
 
     // edit description 
     const updateUser = async (e) => {
         e.preventDefault();
         try {
             const body = { firstName, lastName, email, age };
-            await fetch(`http://localhost:5000/client/${user_id}`, {
+            console.log((body));
+            await fetch(`http://localhost:5000/users/${user_id}`, {
                 method: "PUT",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify(body)
@@ -45,45 +49,48 @@ const EditClients = (props) => {
         catch (err) { console.error(err.message); }
     }
 
-
-    useEffect(() => {
-        getUser()
-    }, [])
-
-
-
     return (
         <Fragment>
             <div className="mt-2 p-5">
 
                 <h4 className="text-center mb-5">Edit user</h4>
+                <div className="mb-4" >
+                    <label>FirstName:</label>
+                    <input type="text"
+                        className="form-control mt-2"
+                        placeholder="Please put the Firstname"
+                        required
+                        defaultValue={user.firstname}
+                        onChange={e => setfirstName(e.target.value)}
+                    />
+                </div>
+                <div className="mb-4"  >
+                    <label>Lastname: </label>
+                    <input type="text"
+                        className="form-control mt-2"
+                        placeholder="Please put the Lastname"
+                        required
+                        defaultValue={user.lastname}
+                        onChange={e => setlastName(e.target.value)}
+                    />
+                </div>
+                <div className="mb-4" >
+                    <label>Email: </label>
+                    <input type="email"
+                        className="form-control mt-2"
+                        placeholder="Please put the Email address"
+                        required
+                        defaultValue={user.email}
+                        onChange={e => setemail(e.target.value)}
+                    />
+                </div>
 
-                <input type="text"
-                    className="form-control mt-2"
-                    placeholder="Please put the Firstname"
-                    required
-                    value={firstName}
-                    onChange={e => setfirstName(e.target.value)}
-                />
-                <input type="text"
-                    className="form-control mt-2"
-                    placeholder="Please put the Lastname"
-                    required
-                    value={lastName}
-                    onChange={e => setlastName(e.target.value)}
-                />
-                <input type="text"
-                    className="form-control mt-2"
-                    placeholder="Please put the Email address"
-                    required
-                    value={email}
-                    onChange={e => setemail(e.target.value)}
-                />
+                <label>Age: </label>
                 <input type="text"
                     className="form-control mt-2"
                     placeholder="Please put the age"
                     required
-                    value={age}
+                    defaultValue={user.age}
                     onChange={e => setage(e.target.value)}
                 />
 

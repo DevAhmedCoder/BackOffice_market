@@ -40,8 +40,8 @@ const ListClients = () => {
     console.log(clients);
     return (
         <Fragment>
-            <table className="table table-dark mt-5 text-center">
-                <thead>
+            <table className="table  mt-5 text-center">
+                <thead className="table-dark" >
                     <tr>
                         <th>FirstName</th>
                         <th>LastName</th>
@@ -51,7 +51,7 @@ const ListClients = () => {
                         <th>Delete</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className=" border-dark "  >
                     {clients.map(client => (
                         <tr key={client.user_id} >
                             <td>{client.firstname}</td>

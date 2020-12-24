@@ -33,15 +33,16 @@ const ListProduct = () => {
     }
 
     useEffect(() => {
-        getProduct()
+        getProduct();
+     
     }, [])
 
 
     return (
         <Fragment>
-            <table className="table table-dark mt-5 text-center">
+            <table className="table  mt-5 text-center">
                 <thead>
-                    <tr>
+                    <tr className="table-dark" >
                         <th>Reference</th>
                         <th>Name</th>
                         <th>Category</th>
@@ -50,7 +51,7 @@ const ListProduct = () => {
                         <th>Delete</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className=" border-dark "  >
                     {products.map(prod => (
                         <tr key={prod.product_id} >
                             <td>{prod.product_ref}</td>
