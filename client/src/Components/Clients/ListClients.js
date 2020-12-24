@@ -37,7 +37,6 @@ const ListClients = () => {
         setTimeout(() => getUsers(), 100);
     }, [])
 
-    console.log(clients);
     return (
         <Fragment>
             <table className="table  mt-5 text-center">
@@ -59,7 +58,7 @@ const ListClients = () => {
                             <td>{client.email}</td>
                             <td>{client.age}</td>
                             <td>
-                                <Link to={"/clients/edit/#".concat(client.user_id)}>
+                                <Link to={"/clients/edit/".concat(client.user_id)}>
                                     <button className="btn btn-warning">Edit</button>
                                 </Link>
                             </td>

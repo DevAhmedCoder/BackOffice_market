@@ -13,7 +13,7 @@ CREATE TABLE product(
     -- ref VARCHAR(255) UNIQUE,
     product_name VARCHAR(255),
     -- name VARCHAR(255),
-    product_category VARCHAR REFERENCES categories(category),
+    category_id SERIAL REFERENCES categories(category_id),
     -- category_id SERIAL REFERENCES categories(id),
     Product_price DECIMAL
 );

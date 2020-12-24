@@ -3,9 +3,7 @@ import { HashRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
 const EditClients = (props) => {
 
-    const { hash } = props.location;
-
-    const user_id = hash.substring(1);
+    const user_id = props.match.params.id;
 
     const [user, setuser] = useState("");
 
@@ -38,7 +36,6 @@ const EditClients = (props) => {
         e.preventDefault();
         try {
             const body = { firstName, lastName, email, age };
-            console.log((body));
             await fetch(`http://localhost:5000/users/${user_id}`, {
                 method: "PUT",
                 headers: { "content-type": "application/json" },
@@ -86,7 +83,8 @@ const EditClients = (props) => {
                 </div>
 
                 <label>Age: </label>
-                <input type="text"
+                <input type="number"
+                    min="0"
                     className="form-control mt-2"
                     placeholder="Please put the age"
                     required

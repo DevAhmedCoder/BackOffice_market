@@ -57,7 +57,7 @@ const InputClients = () => {
                 <div className="form-group">
                     <label>Email</label>
                     <input
-                        type="text"
+                        type="email"
                         className="form-control mb-2"
                         placeholder="Please put the Email address"
                         required
@@ -68,7 +68,8 @@ const InputClients = () => {
                 <div className="form-group">
                     <label>Age</label>
                     <input
-                        type="text"
+                        type="number"
+                        min="0"
                         className="form-control mb-2"
                         placeholder="Please put the age"
                         required

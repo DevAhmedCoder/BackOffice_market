@@ -1,8 +1,7 @@
 import React from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
-import Header from './Components/Header/header';
-import Navbar from './Components/Sidebar/Sidebar';
+import Sidebar from './Components/Sidebar/Sidebar';
 // import InputProduct from './Components/Products/inputProduct';
 // import ListProduct from './Components/Products/ListProduct';
 import Home from './Components/Home/Home'
@@ -23,23 +22,23 @@ function App() {
     <div className="container-fluid ">
       <Router>
         <div className="row vh-100 " >
-          <Navbar />
+          <Sidebar />
           <div className="col   border container-fluid   " >
             <div className="row " >
-              <Header />
+            
               <div className=" vh-100" >
                 <Router>
                   <Switch>
                     <Route exact path='/' component={Home} />
                     <Route  exact path='/products' component={Products} />
-                    <Route  path='/products/edit' component={EditProduct} />
+                    <Route  path='/products/edit/:id' component={EditProduct} />
                     <Route  path='/products/input' component={InputProduct } />
                     <Route exact path='/clients' component={Clients} />
                     <Route exact path='/categories' component={Categories} />
                     <Route  path='/categories/input' component={InputCategories} />
-                    <Route  path='/categories/edit' component={EditCategories} />
+                    <Route  path='/categories/edit/:id' component={EditCategories} />
                     <Route  path='/clients/input' component={InputClients} />
-                    <Route  path='/clients/edit' component={EditClients} />
+                    <Route  path='/clients/edit/:id' component={EditClients} />
                     <Route component={ErrorPage} />
                   </Switch>
                 </Router>

@@ -55,7 +55,7 @@ const ListCategories = () => {
                         <tr key={cat.category_id} >
                             <td className="" >{cat.category}</td>
                             <td>
-                                <Link to={"/categories/edit/#".concat(cat.category_id)}>
+                                <Link to={"/categories/edit/".concat(cat.category_id)}>
                                     <button className="btn btn-warning">Edit</button>
                                 </Link>
                             </td>
