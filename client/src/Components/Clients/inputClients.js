@@ -1,93 +1,120 @@
-import React, { Fragment, useState} from 'react';
-import { HashRouter as Switch, Link } from 'react-router-dom'
+import React, {useState} from 'react';
+import {
+    CButton,
+    CCard,
+    CCardBody,
+    CCardHeader,
+    CCol,
+    CForm,
+    CFormGroup,
+    CFormText,
+    CInput,
+    CLabel, CLink
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
 
 const InputClients = () => {
 
-    const [firstName, setfirstName] = useState("");
-    const [lastName, setlastName] = useState("");
-    const [email, setemail] = useState("");
-    const [age, setage] = useState("")
+    const [first_name, setFirst_name] = useState("");
+    const [last_name, setLast_name] = useState("");
+    const [email, setEmail] = useState("");
+    const [age, setAge] = useState("")
 
     // New client
     const onSubmitForm = async (e) => {
         e.preventDefault();
         try {
-            const body = { firstName, lastName, email, age };
+            const body = {first_name, last_name, email, age};
             fetch("http://localhost:5000/users", {
                 method: "POST",
-                headers: { "content-Type": "application/json" },
+                headers: {"content-Type": "application/json"},
                 body: JSON.stringify(body)
             });
-
-            window.location = "/#/clients"
-
+            window.location = "/#/users"
         } catch (err) {
             console.error(err.message);
         }
     }
 
     return (
-        <Fragment>
-            <h1 className="text-center mt-5">New client</h1>
+        <CCol xs="12">
+            <CCard>
+                <CCardHeader>
+                    USER
+                    <small> ADD</small>
+                </CCardHeader>
+                <CCardBody>
+                    <CForm className="form-horizontal" onSubmit={onSubmitForm}>
 
-            <form className="  p-3 m-5" onSubmit={onSubmitForm}>
-                <div className="">
-                    <label >FirstName</label>
-                    <input
-                        type="text"
-                        className="form-control mb-2"
-                        placeholder="Please put the Firstname"
-                        required
-                        value={firstName}
-                        onChange={e => setfirstName(e.target.value)}
-                    />
-                </div>
-                <div className="form-group">
-                    <label>LastName</label>
-                    <input
-                        type="text"
-                        className="form-control mb-2"
-                        placeholder="Please put the Lastname"
-                        required
-                        value={lastName}
-                        onChange={e => setlastName(e.target.value)}
-                    />
-                </div>
+                        {/*first name input*/}
+                        <CFormGroup row>
+                            <CCol md="3">
+                                <CLabel htmlFor="first_name">First name</CLabel>
+                            </CCol>
+                            <CCol xs="12" md="9">
+                                <CInput type="text" id="first_name" name="first_name"
+                                        placeholder="Please put your first name"
+                                        required
+                                        value={first_name}
+                                        onChange={e => setFirst_name(e.target.value)}/>
+                                <CFormText className="help-block">Please enter your first name</CFormText>
+                            </CCol>
+                        </CFormGroup>
 
-                <div className="form-group">
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        className="form-control mb-2"
-                        placeholder="Please put the Email address"
-                        required
-                        value={email}
-                        onChange={e => setemail(e.target.value)}
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Age</label>
-                    <input
-                        type="number"
-                        min="0"
-                        className="form-control mb-2"
-                        placeholder="Please put the age"
-                        required
-                        value={age}
-                        onChange={e => setage(e.target.value)}
-                    />
-                </div>
-                <div className="modal-footer">
-                    <button type="submit" className=" btn btn-success">Save</button>
-                    <Link to="/clients" > <button
-                        type="button"
-                        className="btn btn-danger"
-                        data-dismiss="modal"
+                        {/*last name input*/}
+                        <CFormGroup row>
+                            <CCol md="3">
+                                <CLabel htmlFor="last_name">Last name</CLabel>
+                            </CCol>
+                            <CCol xs="12" md="9">
+                                <CInput type="text" id="last_name" name="last_name"
+                                        placeholder="Please put your last name"
+                                        required
+                                        value={last_name}
+                                        onChange={e => setLast_name(e.target.value)}/>
+                                <CFormText className="help-block">Please enter your last name</CFormText>
+                            </CCol>
+                        </CFormGroup>
 
-                    >Close</button></Link>
-                </div>
-            </form>
-        </Fragment>
+                        {/*email input*/}
+                        <CFormGroup row>
+                            <CCol md="3">
+                                <CLabel htmlFor="email">Email</CLabel>
+                            </CCol>
+                            <CCol xs="12" md="9">
+                                <CInput type="email" id="email" name="email" placeholder="Please put your email"
+                                        required
+                                        value={email}
+                                        onChange={e => setEmail(e.target.value)}/>
+                                <CFormText className="help-block">Please enter your email</CFormText>
+                            </CCol>
+                        </CFormGroup>
+
+                        {/*age input*/}
+                        <CFormGroup row>
+                            <CCol md="3">
+                                <CLabel htmlFor="age">Age</CLabel>
+                            </CCol>
+                            <CCol xs="12" md="9">
+                                <CInput type="number" id="age" name="age" min="0" step="0.01" placeholder="Please put your age"
+                                        required
+                                        value={age}
+                                        onChange={e => setAge(e.target.value)}/>
+                                <CFormText className="help-block">Please enter your age</CFormText>
+                            </CCol>
+                        </CFormGroup>
+                        <div className="float-right">
+                            <CButton type="submit" size="sm" color="success" className="mr-4">
+                                <CIcon name="cil-scrubber"/> Add</CButton>
+                            <CLink to='/users'>
+                                <CButton type="reset" size="sm" color="danger">
+                                    <CIcon name="cil-ban"/>Cancel</CButton>
+                            </CLink>
+                        </div>
+                    </CForm>
+                </CCardBody>
+            </CCard>
+        </CCol>
     )
 }
 

@@ -1,13 +1,16 @@
 import React from 'react'
 import ListClients from './ListClients'
-import { HashRouter as Router, Route, Switch, Link } from 'react-router-dom'
+import {CButton, CLink} from "@coreui/react";
 
 const Clients = () => {
     return (
         <div>
-            <Link to='/clients/input' ><button type="button" className="btn btn-primary mt-5">+  Add</button></Link>
-            <ListClients />
-            
+            <CLink to='/users/add'>
+                <CButton color="primary" shape="pill" size="lg" className="mb-2">
+                    <span>+</span> Add
+                </CButton>
+            </CLink>
+            <ListClients/>
         </div>
     )
 }

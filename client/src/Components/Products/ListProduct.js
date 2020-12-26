@@ -24,7 +24,7 @@ const ListProduct = () => {
             await fetch(`http://localhost:5000/product/${id}`, {
                 method: "DELETE"
             });
-            window.location.reload();
+            getProduct();
         }
         catch (err) {
             console.error(err.message)

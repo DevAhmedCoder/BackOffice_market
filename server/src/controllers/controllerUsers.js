@@ -1,11 +1,13 @@
 const pool = require("../../config/db");
 
-// create a users
+// create user
 exports.create = async (req, res) => {
     try {
-        const { firstName, lastName, email, age } = req.body;
-        const newUsers = await pool.query("INSERT INTO users (firstName, lastName, email, age) VALUES ($1, $2, $3, $4) RETURNING *", [firstName, lastName, email, age]);
-        res.json(newUsers.rows[0]);
+        const { first_name, last_name, email, age } = req.body;
+         await pool.query(
+            "INSERT INTO users (first_name, last_name, email, age) VALUES ($1, $2, $3, $4) RETURNING *",
+            [first_name, last_name, email, age]);
+        ;
     }
     catch (err) {
         console.error(err.message)
@@ -23,7 +25,7 @@ exports.findAll = async (req, res) => {
     }
 };
 
-// find users
+// find user
 exports.findById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -38,10 +40,10 @@ exports.findById = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { id } = req.params;
-        const { firstName, lastName, email, age } = req.body;
+        const { first_name, last_name, email, age } = req.body;
         await pool.query(
-            "UPDATE users SET firstName = $2, lastName = $3, email = $4, age = $5  WHERE user_id = $1",
-            [id, firstName, lastName, email,age]);
+            "UPDATE users SET first_name = $2, last_name = $3, email = $4, age = $5  WHERE user_id = $1",
+            [id, first_name, last_name, email,age]);
         res.json("user was update!");
     } catch (err) {
         console.error(err.message);

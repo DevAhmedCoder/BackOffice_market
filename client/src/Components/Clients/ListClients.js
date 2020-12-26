@@ -1,21 +1,15 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { HashRouter as Switch, Link } from 'react-router-dom';
-import EditClients from './EditClients';
-// import Editclientuct from './Editclientuct';
-
+import React, {useEffect, useState} from 'react';
+import {CButton, CCard, CCardBody, CCardHeader, CCol, CDataTable, CLink, CRow} from "@coreui/react";
 
 const ListClients = () => {
-
     const [clients, setClients] = useState([])
-
-    // Show database 
+    // get users
     const getUsers = async () => {
         try {
-            const response = await fetch("http://localhost:5000/users");
-            const jsonData = await response.json();
-            setClients(jsonData);
-        }
-        catch (err) {
+            const response = await fetch("http://localhost:5000/users")
+                .then(response => response.json())
+                .then(jsonData => setClients(jsonData));
+        } catch (err) {
             console.error(err.message)
         }
     }
@@ -26,53 +20,68 @@ const ListClients = () => {
                 method: "DELETE"
             });
             getUsers()
-        }
-        catch (err) {
+        } catch (err) {
             console.error(err.message)
         }
     }
 
     useEffect(() => {
-
-        setTimeout(() => getUsers(), 100);
+        getUsers();
     }, [])
 
+    const fields = ['user_id','first_name', 'last_name', 'age',
+        {
+            key: 'edit',
+            label: '',
+            _style: {width: '1%'},
+            sorter: false,
+            filter: false
+        }]
+
     return (
-        <Fragment>
-            <table className="table  mt-5 text-center">
-                <thead className="table-dark" >
-                    <tr>
-                        <th>FirstName</th>
-                        <th>LastName</th>
-                        <th>email</th>
-                        <th>age</th>
-                        <th>Edition</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody className=" border-dark "  >
-                    {clients.map(client => (
-                        <tr key={client.user_id} >
-                            <td>{client.firstname}</td>
-                            <td>{client.lastname}</td>
-                            <td>{client.email}</td>
-                            <td>{client.age}</td>
-                            <td>
-                                <Link to={"/clients/edit/".concat(client.user_id)}>
-                                    <button className="btn btn-warning">Edit</button>
-                                </Link>
-                            </td>
-                            <td>
-                                <button className="btn btn-danger"
-                                    onClick={() => deleteUser(client.user_id)}>
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </Fragment>
+        <>
+            <CRow>
+                <CCol xs="12">
+                    <CCard>
+                        <CCardHeader>
+                            All Users
+                        </CCardHeader>
+                        <CCardBody>
+                            <CDataTable
+                                items={clients}
+                                fields={fields}
+                                tableFilter
+                                // sorter
+                                striped
+                                hover
+                                border
+                                itemsPerPageSelect
+                                itemsPerPage={10}
+                                pagination
+                                scopedSlots={{
+                                    'edit':
+                                        (client) => {
+                                            return (
+                                                <td className="py-2 d-flex">
+                                                    <CLink to={"/users/edit/".concat(client.user_id)}>
+                                                        <CButton color="primary" shape="pill" size="sm">
+                                                            edit
+                                                        </CButton>
+                                                    </CLink>
+                                                    <CButton color="danger" shape="pill" size="sm" className="ml-1"
+                                                             onClick={() => deleteUser(client.user_id)}>
+                                                        Delete
+                                                    </CButton>
+                                                </td>
+                                            )
+                                        }
+                                }}
+                            />
+                        </CCardBody>
+                    </CCard>
+                </CCol>
+            </CRow>
+        </>
     )
 }
 

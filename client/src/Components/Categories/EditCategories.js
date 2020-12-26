@@ -5,39 +5,34 @@ const EditCategories = (props) => {
 
     const category_id = props.match.params.id;
     const [category, setCategory] = useState('')
-
-    // Show category
+    
+    // Get category
     const getCategory = async () => {
 
         try {
-            const response = await fetch(`http://localhost:5000/categories/${category_id }`);
-            const jsonData = await response.json();
-            setCategory(jsonData.category);
-        
+            const response = await fetch(`http://localhost:5000/categories/${category_id }`)
+            .then( response=>response.json())
+                .then(jsonData => setCategory(jsonData));
         }
         catch (err) {
             console.error(err.message)
         }
     }
 
-    // edit category
+    // update category
     const updateCategory = async (e) => {
-        console.log(category)
         e.preventDefault();
         try {
+            const category_name = category.category;
             await fetch(`http://localhost:5000/categories/${category_id }`, {
                 method: "PUT",
                 headers: { "content-type": "application/json" },
-                body: JSON.stringify({category})
+                body: JSON.stringify({category_name})
             });
-            setTimeout(()=>{ window.location = "/#/categories"}, 50);
+            window.location = "/#/categories";
             
         }
         catch (err) { console.error(err.message); }
-    }
-
-    const handleClose = () => {
-        setCategory("");
     }
 
     useEffect(() => {
@@ -52,8 +47,8 @@ const EditCategories = (props) => {
                     <input type="text"
                         className="form-control"
                         placeholder="Please put the category"
-                        value={category}
-                        onChange={e => setCategory(e.target.value)}
+                        defaultValue={category.category}
+                        onChange={e => setCategory({...category, category:e.target.value})}
                     />
                 </div>
                 <div className="modal-footer">
@@ -66,7 +61,6 @@ const EditCategories = (props) => {
                     <Link to="/categories" ><button
                         type="button"
                         className="btn btn-danger"
-                        onClick={handleClose}
                     >Close</button></Link>
                 </div>
             </div>
