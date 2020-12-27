@@ -28,35 +28,35 @@ router.delete("/categories/:id", categoriesController.delete);
 //---------------------------------------------------- 
 
 // create a product
-router.post("/product", productsController.create);
+router.post("/products", productsController.create);
 
 // get all product
-router.get("/product", productsController.findAll);
+router.get("/products", productsController.findAll);
 
 // find one product
-router.get("/product/:id", productsController.findById);
+router.get("/products/:id", productsController.findById);
 
 // update a product
-router.put("/product/:id", productsController.update);
+router.put("/products/:id", productsController.update);
 
 // delete a product
-router.delete("/product/:id", productsController.delete);
+router.delete("/products/:id", productsController.delete);
 
 // ------------------------------------------------------
 
-// // create a user
+// create a user
 router.post("/users", usersController.create);
 
-// // get all users
+// get all users
 router.get("/users", usersController.findAll);
 
-// // find one user
+// find one user
 router.get("/users/:id", usersController.findById);
 
-// // update a user
+// update a user
 router.put("/users/:id", usersController.update);
 
-// // delete a user
+// delete a user
 router.delete("/users/:id", usersController.delete);
 
 // ------------------------------------------------------
