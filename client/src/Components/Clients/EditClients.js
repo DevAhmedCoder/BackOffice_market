@@ -1,20 +1,18 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { HashRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { HashRouter as Link } from 'react-router-dom';
 
 const EditClients = (props) => {
 
-    const { hash } = props.location;
+    const user_id = props.match.params.id;
 
-    const user_id = hash.substring(1);
-
-    const [user, setuser] = useState("");
+    const [user, setUser] = useState({});
 
     // Show user
     const getUser = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/users/${user_id}`);
-            const jsonData = await response.json();
-            setuser(jsonData[0]);
+            const response = await fetch(`http://localhost:5000/users/${user_id}`)
+           .then(response =>response.json()) 
+                .then(jsonData => setUser(jsonData[0]));
 
         }
         catch (err) {
@@ -26,25 +24,16 @@ const EditClients = (props) => {
         getUser();
     }, []);
 
-    const [firstName, setfirstName] = useState("");
-    const [lastName, setlastName] = useState("");
-    const [email, setemail] = useState("");
-    const [age, setage] = useState("");
-
-
-
     // edit description 
     const updateUser = async (e) => {
         e.preventDefault();
         try {
-            const body = { firstName, lastName, email, age };
-            console.log((body));
             await fetch(`http://localhost:5000/users/${user_id}`, {
                 method: "PUT",
                 headers: { "content-type": "application/json" },
-                body: JSON.stringify(body)
+                body: JSON.stringify(user)
             });
-            window.location = "/#/clients";
+            window.location = "/#/users";
         }
         catch (err) { console.error(err.message); }
     }
@@ -52,16 +41,16 @@ const EditClients = (props) => {
     return (
         <Fragment>
             <div className="mt-2 p-5">
-
                 <h4 className="text-center mb-5">Edit user</h4>
+
                 <div className="mb-4" >
                     <label>FirstName:</label>
                     <input type="text"
                         className="form-control mt-2"
                         placeholder="Please put the Firstname"
                         required
-                        defaultValue={user.firstname}
-                        onChange={e => setfirstName(e.target.value)}
+                        defaultValue={user.first_name}
+                        onChange={e => setUser({ ...user, first_name: e.target.value })}
                     />
                 </div>
                 <div className="mb-4"  >
@@ -70,8 +59,8 @@ const EditClients = (props) => {
                         className="form-control mt-2"
                         placeholder="Please put the Lastname"
                         required
-                        defaultValue={user.lastname}
-                        onChange={e => setlastName(e.target.value)}
+                        defaultValue={user.last_name}
+                        onChange={e => setUser({ ...user, last_name: e.target.value})}
                     />
                 </div>
                 <div className="mb-4" >
@@ -81,17 +70,18 @@ const EditClients = (props) => {
                         placeholder="Please put the Email address"
                         required
                         defaultValue={user.email}
-                        onChange={e => setemail(e.target.value)}
+                        onChange={e => setUser({...user, email: e.target.value})}
                     />
                 </div>
 
                 <label>Age: </label>
-                <input type="text"
+                <input type="number"
+                    min="0"
                     className="form-control mt-2"
                     placeholder="Please put the age"
                     required
                     defaultValue={user.age}
-                    onChange={e => setage(e.target.value)}
+                    onChange={e => setUser({...user, age: e.target.value})}
                 />
 
                 <div className="modal-footer">
@@ -106,10 +96,8 @@ const EditClients = (props) => {
                         className="btn btn-danger"
                     >Close</button></Link>
                 </div>
-
             </div>
         </Fragment>
     )
 }
-
 export default EditClients

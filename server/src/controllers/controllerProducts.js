@@ -3,8 +3,8 @@ const pool = require("../../config/db");
 // create a product
 exports.create = async (req, res) => {
     try {
-        const { product_ref, product_name, product_category, product_price } = req.body;
-        const newProduct = await pool.query("INSERT INTO product (product_ref, product_name, product_category, product_price) VALUES ($1, $2, $3, $4) RETURNING *", [product_ref, product_name, product_category, product_price]);
+        const { product_ref, product_name, category_id, product_price } = req.body;
+        const newProduct = await pool.query("INSERT INTO product (product_ref, product_name, category_id, product_price) VALUES ($1, $2, $3, $4) RETURNING *", [product_ref, product_name, category_id, product_price]);
         res.json(newProduct.rows[0]);
     }
     catch (err) {
@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
 // find all products
 exports.findAll = async (req, res) => {
     try {
-        const allProduct = await pool.query("SELECT * FROM product");
+        const allProduct = await pool.query("SELECT * FROM product INNER JOIN categories on product.category_id = categories.category_id");
         res.json(allProduct.rows);
     } catch (err) {
         console.error(err.message);
@@ -26,7 +26,7 @@ exports.findAll = async (req, res) => {
 exports.findById = async (req, res) => {
     try {
         const { id } = req.params;
-        const oneProduct = await pool.query("SELECT * FROM product WHERE product_id = $1", [id]);
+        const oneProduct = await pool.query("SELECT * FROM product INNER JOIN categories on product.category_id = categories.category_id WHERE product_id = $1", [id]);
         res.json(oneProduct.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -37,10 +37,10 @@ exports.findById = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { id } = req.params;
-        const { product_ref, product_name, product_category, product_price } = req.body;
+        const { product_ref, product_name, category_id, product_price } = req.body;
         await pool.query(
-            "UPDATE product SET product_ref = $2, product_name = $3, product_category = $4, product_price = $5  WHERE product_id = $1",
-            [id, product_ref, product_name, product_category, product_price]);
+            "UPDATE product SET product_ref = $2, product_name = $3, category_id = $4, product_price = $5  WHERE product_id = $1",
+            [id, product_ref, product_name, category_id, product_price]);
         res.json("Product was update!");
     } catch (err) {
         console.error(err.message);

@@ -6,14 +6,13 @@ import { HashRouter as Switch, Link } from 'react-router-dom';
 const ListProduct = () => {
 
     const [products, setProducts] = useState([])
-
+    
     // Show database 
     const getProduct = async () => {
         try {
             const response = await fetch("http://localhost:5000/product");
             const jsonData = await response.json();
             setProducts(jsonData);
-            console.log(products);
         }
         catch (err) {
             console.error(err.message)
@@ -25,7 +24,7 @@ const ListProduct = () => {
             await fetch(`http://localhost:5000/product/${id}`, {
                 method: "DELETE"
             });
-            window.location.reload();
+            getProduct();
         }
         catch (err) {
             console.error(err.message)
@@ -56,10 +55,10 @@ const ListProduct = () => {
                         <tr key={prod.product_id} >
                             <td>{prod.product_ref}</td>
                             <td>{prod.product_name}</td>
-                            <td>{prod.product_category}</td>
+                            <td>{prod.category}</td>
                             <td>{prod.product_price}</td>
                             <td>
-                                <Link to={"/products/edit/#".concat(prod.product_id)}>
+                                <Link to={"/products/edit/".concat(prod.product_id)}>
                                     <button className="btn btn-warning">Edit</button>
                                 </Link>
                             </td>

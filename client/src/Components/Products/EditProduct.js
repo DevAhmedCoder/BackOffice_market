@@ -2,57 +2,59 @@ import React, { Fragment, useState, useEffect } from 'react'
 import { HashRouter as Switch, Link } from 'react-router-dom'
 
 const EditProduct = (props) => {
+  
+    const product_id = props.match.params.id;
 
-    const { hash } = props.location;
+    // init variable product un categories
+    // first execution, before running anything else
+    const [product, setProduct] = useState({});
+    const [categories, setCategories] = useState([]);
 
-    const product_id = hash.substring(1);
+    // it will replaced inline on the input
 
-    const [product, setproduct] = useState("");
+    // const [product_ref, setProduct_ref] = useState("");
+    // const [product_name, setProduct_name] = useState("");
+    // const [category_id, setCategory_id] = useState("");
+    // const [product_price, setProduct_price] = useState(0);
+  
 
-    // Show product
+    // get product
     const getProduct = async () => {
-
         try {
             const response = await fetch(`http://localhost:5000/product/${product_id}`);
             const jsonData = await response.json();
-            setproduct(jsonData);
-
+            setProduct(jsonData);
         }
         catch (err) {
             console.error(err.message)
         }
     }
-   
 
-    const [product_ref, setProduct_ref] = useState("");
-    const [product_name, setProduct_name] = useState("");
-    const [product_category, setProduct_category] = useState("");
-    const [product_price, setProduct_price] = useState();
-    const [categories, setCategories] = useState([]);
-
-    // Categories list
-    const getCategory = async () => {
-
+    // get categories
+    const getCategories = async () => {
         try {
-            const response = await fetch("http://localhost:5000/categories");
-            const jsonData = await response.json();
-            setCategories(jsonData);
+            const response = await fetch("http://localhost:5000/categories")
+                .then(response => response.json())
+                .then(resJSON => setCategories(resJSON))
         }
         catch (err) {
             console.error(err.message)
         }
     }
   
+    // running function that will be user
     useEffect(() => {
-        getCategory();
         getProduct();
+        getCategories();
     }, [])
 
-    // edit description 
+    // update product 
     const updateProduct = async (e) => {
         e.preventDefault();
         try {
-            const body = { product_ref, product_name, product_category, product_price };
+            const { product_ref, product_name, category_id, product_price } = product;
+            const body = { product_ref, product_name, category_id, product_price };
+            console.log(product_id);
             await fetch(`http://localhost:5000/product/${product_id}`, {
                 method: "PUT",
                 headers: { "content-type": "application/json" },
@@ -63,55 +65,50 @@ const EditProduct = (props) => {
         catch (err) { console.error(err.message); }
     }
 
-
-
-
     return (
         <Fragment>
             <div className="mt-2 p-5">
-
                 <h4 className="text-center mb-5">Edit Product</h4>
 
-                <label>Ref: {product.product_ref}</label>
+                <label>Ref</label>
                 <input type="text"
                     className="form-control mt-2"
                     placeholder="Please put the Ref"
                     required
-                    value={product_ref}
-                    onChange={e => setProduct_ref(e.target.value)}
+                    defaultValue={product.product_ref}
+                    onChange={e => setProduct({...product, product_ref:e.target.value})}
                 />
 
-                <label>Name: {product.product_name}</label>
+                <label>Name</label>
                 <input type="text"
                     className="form-control mt-2"
                     placeholder="Please put the name"
                     required
-                    value={product_name}
-                    onChange={e => setProduct_name(e.target.value)}
+                    defaultValue={product.product_name}
+                    onChange={e => setProduct({ ...product, product_name: e.target.value })}
                 />
-                <label>Category: {product.product_category}</label>
-                <select
-                    className="form-select mt-2"
-                    aria-label="Default select example"
-                    required
-                    onChange={(e) => setProduct_category(e.target.value)}>
-                    
-                    <option selected disabled value="">Open this select menu</option>
-                    {categories.map(category => (
-                        <option key={category.category_id} value={category.category} >{category.category}</option>
 
-                    ))}
+                <label>Category</label>
+                <select className="form-select mt-2" required value={product.category_id}
+                    onChange={(e) => setProduct({ ...product, category_id: e.target.value })}>
+                    {categories.map(category => (
+                        <option
+                            key={category.category_id}
+                            value={category.category_id} >
+                            {category.category}
+                        </option>
+                    ))
+                    }
                 </select>
-            
-            <label>Price: {product.product_price}</label>
+
+                <label>Price</label>
                 <input type="text"
                     className="form-control mt-2"
                     placeholder="Please put the price"
                     required
-                    value={product_price}
-                    onChange={e => setProduct_price(e.target.value)}
+                    defaultValue={product.product_price}
+                    onChange={e => setProduct({ ...product, product_price: e.target.value })}
                 />
-
 
                 <div className="modal-footer">
                     <button
@@ -125,7 +122,6 @@ const EditProduct = (props) => {
                         className="btn btn-danger"
                     >Close</button></Link>
                 </div>
-
             </div>
         </Fragment>
     )

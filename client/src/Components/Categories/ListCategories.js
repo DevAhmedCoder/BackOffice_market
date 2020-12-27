@@ -5,8 +5,8 @@ const ListCategories = () => {
 
     const [categories, setCategories] = useState([]);
 
-    // Show database 
-    const getCategory = async () => {
+    // Get all categories
+    const getCategories = async () => {
 
         try {
             const response = await fetch("http://localhost:5000/categories");
@@ -18,16 +18,13 @@ const ListCategories = () => {
         }
     }
 
-    // Delete Product
+    // Delete category
     const deleteCategory = async (id) => {
-
-        console.log(id);
         try {
             await fetch(`http://localhost:5000/categories/${id}`, {
                 method: "DELETE"
             });
-            setTimeout(() => { window.location = "/#/" }, 1);
-            setTimeout(() => { window.location = "/#/categories" }, 2);
+            getCategories();
         }
         catch (err) {
             console.error(err.message)
@@ -36,7 +33,7 @@ const ListCategories = () => {
     }
 
     useEffect(() => {
-        setTimeout(() => getCategory(), 1);
+        getCategories();
     }, [])
 
 
@@ -51,18 +48,18 @@ const ListCategories = () => {
                     </tr>
                 </thead>
                 <tbody className=" border-dark " >
-                    {categories.map(cat => (
-                        <tr key={cat.category_id} >
-                            <td className="" >{cat.category}</td>
+                    {categories.map(category => (
+                        <tr key={category.category_id} >
+                            <td className="" >{category.category}</td>
                             <td>
-                                <Link to={"/categories/edit/#".concat(cat.category_id)}>
+                                <Link to={"/categories/edit/".concat(category.category_id)}>
                                     <button className="btn btn-warning">Edit</button>
                                 </Link>
                             </td>
                             <td>
                                 <button
                                     className="btn btn-danger"
-                                    onClick={() => deleteCategory(cat.category_id)}
+                                    onClick={() => deleteCategory(category.category_id)}
                                 >Delete
                                 </button>
                             </td>

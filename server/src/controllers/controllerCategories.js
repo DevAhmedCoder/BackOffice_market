@@ -37,8 +37,8 @@ exports.findById = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { id } = req.params;
-        const { category } = req.body;
-        await pool.query("UPDATE categories SET category = $2  WHERE category_id = $1",[id, category]);
+        const { category_name } = req.body;
+        await pool.query("UPDATE categories SET category = $2  WHERE category_id = $1", [id, category_name]);
         res.json("Category was update!");
     } catch (err) {
         console.error(err.message);
