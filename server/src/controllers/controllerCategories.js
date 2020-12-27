@@ -26,7 +26,7 @@ exports.findAll = async (req, res) => {
 exports.findById = async (req, res) => {
     try {
         const { id } = req.params;
-        const oneCategories = await pool.query("SELECT * FROM categories WHERE category_id=$1", [id]);
+        const oneCategories = await pool.query("SELECT * FROM categories WHERE id=$1", [id]);
         res.json(oneCategories.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -38,7 +38,7 @@ exports.update = async (req, res) => {
     try {
         const { id } = req.params;
         const { category } = req.body;
-        await pool.query("UPDATE categories SET category = $2  WHERE category_id = $1",[id, category]);
+        await pool.query("UPDATE categories SET category = $2  WHERE id = $1",[id, category]);
         res.json("Category was update!");
     } catch (err) {
         console.error(err.message);
@@ -49,7 +49,7 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
     try {
         const { id } = req.params;
-        await pool.query("DELETE FROM categories WHERE category_id  = $1", [id]);
+        await pool.query("DELETE FROM categories WHERE id  = $1", [id]);
         res.json("Category was deleted !");
     }
     catch (err) {

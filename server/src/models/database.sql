@@ -1,28 +1,22 @@
 CREATE DATABASE testdb;
 
 CREATE TABLE categories(
-    category_id SERIAL PRIMARY KEY,
-    -- id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     category VARCHAR(255) UNIQUE
 );
 
-CREATE TABLE product(
-    product_id SERIAL PRIMARY KEY,
-    -- id SERIAL PRIMARY KEY,
-    product_ref VARCHAR(255) UNIQUE,
-    -- ref VARCHAR(255) UNIQUE,
-    product_name VARCHAR(255),
-    -- name VARCHAR(255),
-    product_category VARCHAR REFERENCES categories(category),
-    -- category_id SERIAL REFERENCES categories(id),
-    Product_price DECIMAL
+CREATE TABLE products(
+    id SERIAL PRIMARY KEY,
+    ref VARCHAR(255) UNIQUE,
+    name VARCHAR(255),
+    category SERIAL REFERENCES categories(id),
+    price DECIMAL
 );
 
 CREATE TABLE users(
-    user_id SERIAL PRIMARY KEY,
-    -- id SERIAL PRIMARY KEY,
-    firstName VARCHAR(255),
-    lastName VARCHAR(255),
+    id SERIAL PRIMARY KEY,
+    firstname VARCHAR(255),
+    lastname VARCHAR(255),
     email VARCHAR(255) UNIQUE,
     age INT
 );

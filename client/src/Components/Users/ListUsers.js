@@ -1,65 +1,71 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react';
 import { HashRouter as Switch, Link } from 'react-router-dom';
 
-const ListCategories = () => {
 
-    const [categories, setCategories] = useState([]);
+const ListUsers = () => {
+
+    const [users, setUsers] = useState([]);
     const [error, setError] = useState("");
 
     // Show database 
-    const getCategory = async () => {
-
+    const getUsers = async () => {
         try {
-            const response = await fetch("http://localhost:5000/categories");
+            const response = await fetch("http://localhost:5000/users");
             const jsonData = await response.json();
-            setCategories(jsonData);
+            setUsers(jsonData);
         }
         catch (err) {
             console.error(err.message);
             setError(err.message);
         }
     }
-
-    // Delete Product
-    const deleteCategory = async (id) => {
-
+    // Delete user
+    const deleteUser = async (id) => {
         try {
-            await fetch(`http://localhost:5000/categories/${id}`, {
+            await fetch(`http://localhost:5000/users/${id}`, {
                 method: "DELETE"
             });
-            getCategory();
+
+            getUsers();
         }
         catch (err) {
             console.error(err.message)
         }
-
     }
 
     useEffect(() => {
-        getCategory();
-    }, [])
 
+        getUsers();
+    }, [])
 
     return (
         <Fragment>
-            <table className="table mt-2 text-center">
-                <thead className="table-dark">
+
+            <p>{error}</p>
+
+            <table className="table  mt-5 text-center">
+                <thead className="table-dark" >
                     <tr>
-                        <th>Category</th>
-                        <th>Edit</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>email</th>
+                        <th>age</th>
+                        <th>Edition</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
-                <tbody className=" border-dark " >
-                    {categories.map(category => (
-                        <tr key={category.id} >
-                            <td className="" >{category.category}</td>
+                <tbody className=" border-dark "  >
+                    {users.map(user => (
+                        <tr key={user.id} >
+                            <td>{user.firstname}</td>
+                            <td>{user.lastname}</td>
+                            <td>{user.email}</td>
+                            <td>{user.age}</td>
                             <td>
-                                <Link to={"/categories/edit/".concat(category.id)}>
+                                <Link to={"/users/edit/".concat(user.id)}>
                                     <button className="btn btn-warning">Edit</button>
                                 </Link>
                             </td>
-
                             <td>
                                 <button
                                     type="button"
@@ -74,18 +80,18 @@ const ListCategories = () => {
                                     <div className="modal-dialog">
                                         <div className="modal-content">
                                             <div className="modal-header">
-                                                <h5 className="modal-title" id="exampleModalLabel">Delete category</h5>
+                                                <h5 className="modal-title" id="exampleModalLabel">Delete user</h5>
                                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div className="modal-body">
-                                                Are you sure you want to delete this category ?
+                                                Are you sure you want to delete this client ?
                                              </div>
                                             <div className="modal-footer">
                                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                 <button
                                                     type="button"
                                                     className="btn btn-danger"
-                                                    onClick={() => deleteCategory(category.id)}
+                                                    onClick={() => deleteUser(user.id)}
                                                     data-bs-dismiss="modal"
                                                 >Delete
                                                 </button>
@@ -101,4 +107,7 @@ const ListCategories = () => {
         </Fragment>
     )
 }
-export default ListCategories;
+
+export default ListUsers
+
+

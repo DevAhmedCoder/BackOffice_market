@@ -3,31 +3,26 @@ import { HashRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
 const EditCategories = (props) => {
 
-    const { hash } = props.location;
-
-    const category_id = hash.substring(1);
-
+    const category_id = props.match.params.id;
     const [category, setCategory] = useState('')
 
+    // Show category
+    const getCategory = async () => {
 
- // Show category
- const getCategory = async () => {
-
-    try {
-        const response = await fetch(`http://localhost:5000/categories/${category_id }`);
-        const jsonData = await response.json();
-        setCategory(jsonData.category);
-      
+        try {
+            const response = await fetch(`http://localhost:5000/categories/${category_id }`);
+            const jsonData = await response.json();
+            setCategory(jsonData.category);
+        
+        }
+        catch (err) {
+            console.error(err.message)
+        }
     }
-    catch (err) {
-        console.error(err.message)
-    }
-}
 
-
-   
     // edit category
     const updateCategory = async (e) => {
+        console.log(category)
         e.preventDefault();
         try {
             await fetch(`http://localhost:5000/categories/${category_id }`, {
@@ -42,24 +37,17 @@ const EditCategories = (props) => {
     }
 
     const handleClose = () => {
-
         setCategory("");
     }
 
     useEffect(() => {
         getCategory();
     }, [])
-
-
+   
     return (
         <Fragment>
-
-
-            
-
             <div className="mt-5 p-5">
                 <h4 >Edit Category</h4>
-
                 <div >
                     <input type="text"
                         className="form-control"
@@ -68,7 +56,6 @@ const EditCategories = (props) => {
                         onChange={e => setCategory(e.target.value)}
                     />
                 </div>
-
                 <div className="modal-footer">
                     <button
                         type="button"
@@ -82,11 +69,8 @@ const EditCategories = (props) => {
                         onClick={handleClose}
                     >Close</button></Link>
                 </div>
-
             </div>
-
         </Fragment>
     )
 }
-
 export default EditCategories
