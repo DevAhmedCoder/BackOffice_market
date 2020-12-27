@@ -29,14 +29,30 @@ const ListClients = () => {
         getUsers();
     }, [])
 
-    const fields = ['user_id','first_name', 'last_name', 'age',
-        {
-            key: 'edit',
-            label: '',
-            _style: {width: '1%'},
-            sorter: false,
-            filter: false
-        }]
+    const fields =
+        [
+            {
+                key: 'user_id',
+                label: 'Id',
+            },
+            {
+                key: 'first_name',
+                sorter: false
+            },
+            'last_name',
+            'email'
+            ,
+            {
+                key: 'age',
+                sorter: false
+            },
+            {
+                key: 'edit',
+                label: 'Action',
+                _style: {width: '1%'},
+                sorter: false
+            }
+        ]
 
     return (
         <>
@@ -51,7 +67,7 @@ const ListClients = () => {
                                 items={clients}
                                 fields={fields}
                                 tableFilter
-                                // sorter
+                                sorter
                                 striped
                                 hover
                                 border

@@ -80,11 +80,11 @@ const routes = [
   // { path: '/notifications/modals', name: 'Modals', component: Modals },
   // { path: '/notifications/toaster', name: 'Toaster', component: Toaster },
   // { path: '/widgets', name: 'Widgets', component: Widgets },
-  // { path: '/users/:id', exact: true, name: 'User Details', component: User }
+  // { path: '/users/:id', exact: true, name: 'User Details', component: User },
   { path: '/', exact: true, name: 'Home' },
   { path: '/users', exact: true,  name: 'Users', component: Users },
-  { path: '/users/add', exact: true,  name: 'AddUser', component: AddUser },
-  { path: '/users/edit/:id', exact: true,  name: 'AddUser', component: EditUser },
+  { path: '/users/add', exact: true,  name: 'Add', component: AddUser },
+  { path: '/users/edit/:id', exact: true,  name: 'Edit', component: EditUser },
 ];
 
 export default routes;
