@@ -12,22 +12,18 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
-const InputCategories = () => {
-    const [category, setCategory] = useState("");
+const Add = () => {
+    const [name, setName] = useState("");
 
     const onSubmitForm = async (e) => {
         e.preventDefault();
         try {
-            const body = {category};
             fetch("http://localhost:5000/categories", {
                 method: "POST",
                 headers: {"content-Type": "application/json"},
-                body: JSON.stringify(body)
+                body: JSON.stringify({name})
             });
-
-            setTimeout(() => {
-                window.location = "/#/categories"
-            }, 50);
+            window.location = "/#/categories";
 
         } catch (err) {
             console.error(err.message);
@@ -49,8 +45,8 @@ const InputCategories = () => {
                             <CCol xs="12" md="9">
                                 <CInput type="text" id="name" name="name" placeholder="Please put the category"
                                         required
-                                        value={category}
-                                        onChange={e => setCategory(e.target.value)}/>
+                                        value={name}
+                                        onChange={e => setName(e.target.value)}/>
                                 <CFormText className="help-block">Please enter your category name</CFormText>
                             </CCol>
                         </CFormGroup>
@@ -67,4 +63,4 @@ const InputCategories = () => {
         </CCol>
     )
 }
-export default InputCategories
+export default Add

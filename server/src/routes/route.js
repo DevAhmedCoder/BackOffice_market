@@ -39,8 +39,11 @@ router.get("/products/:id", productsController.findById);
 // update a product
 router.put("/products/:id", productsController.update);
 
-// delete a product
+// delete a product by id
 router.delete("/products/:id", productsController.delete);
+
+// delete a product  by category id
+router.delete("/products/category/:id", productsController.deleteByCategoryId);
 
 // ------------------------------------------------------
 

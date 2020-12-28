@@ -142,7 +142,7 @@ const Widgets = () => {
         </CWidgetProgressIcon>
         <CWidgetProgressIcon
           header="385"
-          text="New Clients"
+          text="New Users"
           color="gradient-success"
         >
           <CIcon name="cil-userFollow" height="36"/>
@@ -182,7 +182,7 @@ const Widgets = () => {
         </CWidgetProgressIcon>
         <CWidgetProgressIcon
           header="385"
-          text="New Clients"
+          text="New Users"
           color="gradient-success"
           inverse
         >
@@ -226,7 +226,7 @@ const Widgets = () => {
         <CCol sm="6" md="2">
           <CWidgetProgressIcon
             header="385"
-            text="New Clients"
+            text="New Users"
             color="gradient-success"
           >
             <CIcon name="cil-userFollow" height="36"/>
@@ -283,7 +283,7 @@ const Widgets = () => {
         <CCol sm="6" md="2">
           <CWidgetProgressIcon
             header="385"
-            text="New Clients"
+            text="New Users"
             color="gradient-success"
             inverse
           >

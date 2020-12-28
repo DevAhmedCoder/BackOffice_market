@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
-    CAlert,
-    CButton,
+    CAlert, CButton,
     CCard,
     CCardBody,
     CCardHeader,
@@ -10,29 +9,43 @@ import {
     CFormGroup,
     CFormText,
     CInput,
-    CLabel, CLink, CRow
+    CLabel, CLink,
+    CRow
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 
-const InputClients = () => {
+const Edit = (props) => {
 
-    const [first_name, setFirst_name] = useState("");
-    const [last_name, setLast_name] = useState("");
-    const [email, setEmail] = useState("");
-    const [age, setAge] = useState("");
+    const id = props.match.params.id;
+
+    const [user, setUser] = useState({});
     const [error, setError] = useState("");
     const [show, setShow] = useState(false);
 
-    // New client
-    const onSubmitForm = async (e) => {
+    // Show user
+    const getUser = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/users/${id}`)
+                .then(response => response.json())
+                .then(jsonData => setUser(jsonData[0]));
+        } catch (err) {
+            console.error(err.message)
+        }
+    }
+
+    useEffect(() => {
+        getUser();
+    }, []);
+
+    // edit description
+    const updateUser = async (e) => {
         e.preventDefault();
         try {
-            const body = {first_name, last_name, email, age};
-            fetch("http://localhost:5000/users",
+            fetch(`http://localhost:5000/users/${id}`,
                 {
-                    method: "POST",
-                    headers: {"content-Type": "application/json"},
-                    body: JSON.stringify(body)
+                    method: "PUT",
+                    headers: {"content-type": "application/json"},
+                    body: JSON.stringify(user)
                 })
                 .then(response => response.json())
                 .then(response => {
@@ -42,8 +55,7 @@ const InputClients = () => {
                         setError(response.message);
                         setShow(true);
                     }
-                });
-
+                })
         } catch (err) {
             console.error(err.message);
         }
@@ -66,7 +78,7 @@ const InputClients = () => {
                             <small> ADD</small>
                         </CCardHeader>
                         <CCardBody>
-                            <CForm className="form-horizontal" onSubmit={onSubmitForm}>
+                            <CForm className="form-horizontal" onSubmit={updateUser}>
 
                                 {/*first name input*/}
                                 <CFormGroup row>
@@ -77,8 +89,8 @@ const InputClients = () => {
                                         <CInput type="text" id="first_name" name="first_name"
                                                 placeholder="Please put your first name"
                                                 required
-                                                value={first_name}
-                                                onChange={e => setFirst_name(e.target.value)}/>
+                                                defaultValue={user.first_name}
+                                                onChange={e => setUser({...user, first_name: e.target.value})}/>
                                         <CFormText className="help-block">Please enter your first name</CFormText>
                                     </CCol>
                                 </CFormGroup>
@@ -92,8 +104,8 @@ const InputClients = () => {
                                         <CInput type="text" id="last_name" name="last_name"
                                                 placeholder="Please put your last name"
                                                 required
-                                                value={last_name}
-                                                onChange={e => setLast_name(e.target.value)}/>
+                                                defaultValue={user.last_name}
+                                                onChange={e => setUser({...user, last_name: e.target.value})}/>
                                         <CFormText className="help-block">Please enter your last name</CFormText>
                                     </CCol>
                                 </CFormGroup>
@@ -106,8 +118,8 @@ const InputClients = () => {
                                     <CCol xs="12" md="9">
                                         <CInput type="email" id="email" name="email" placeholder="Please put your email"
                                                 required
-                                                value={email}
-                                                onChange={e => setEmail(e.target.value)}/>
+                                                defaultValue={user.email}
+                                                onChange={e => setUser({...user, email: e.target.value})}/>
                                         <CFormText className="help-block">Please enter your email</CFormText>
                                     </CCol>
                                 </CFormGroup>
@@ -121,14 +133,14 @@ const InputClients = () => {
                                         <CInput type="number" id="age" name="age" min="0" step="0.01"
                                                 placeholder="Please put your age"
                                                 required
-                                                value={age}
-                                                onChange={e => setAge(e.target.value)}/>
+                                                defaultValue={user.age}
+                                                onChange={e => setUser({...user, age: e.target.value})}/>
                                         <CFormText className="help-block">Please enter your age</CFormText>
                                     </CCol>
                                 </CFormGroup>
                                 <div className="float-right">
                                     <CButton type="submit" size="sm" color="success" className="mr-4">
-                                        <CIcon name="cil-scrubber"/> Add</CButton>
+                                        <CIcon name="cil-scrubber"/> Save</CButton>
                                     <CLink to='/users'>
                                         <CButton type="reset" size="sm" color="danger">
                                             <CIcon name="cil-ban"/>Cancel</CButton>
@@ -142,5 +154,4 @@ const InputClients = () => {
         </>
     )
 }
-
-export default InputClients
+export default Edit

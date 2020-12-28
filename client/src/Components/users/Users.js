@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {CButton, CCard, CCardBody, CCardHeader, CCol, CDataTable, CLink, CRow} from "@coreui/react";
 
-const ListClients = () => {
-    const [clients, setClients] = useState([])
+const Users = () => {
+
+    const [users, setUsers] = useState([])
     // get users
     const getUsers = async () => {
         try {
             const response = await fetch("http://localhost:5000/users")
                 .then(response => response.json())
-                .then(jsonData => setClients(jsonData));
+                .then(jsonData => setUsers(jsonData));
         } catch (err) {
             console.error(err.message)
         }
@@ -32,7 +33,7 @@ const ListClients = () => {
     const fields =
         [
             {
-                key: 'user_id',
+                key: 'id',
                 label: 'Id',
             },
             {
@@ -53,9 +54,15 @@ const ListClients = () => {
                 sorter: false
             }
         ]
-
     return (
         <>
+            <CRow>
+                <CLink to='/users/add'>
+                    <CButton color="primary" shape="pill" size="lg" className="mb-2">
+                        <span>+</span> Add
+                    </CButton>
+                </CLink>
+            </CRow>
             <CRow>
                 <CCol xs="12">
                     <CCard>
@@ -64,7 +71,7 @@ const ListClients = () => {
                         </CCardHeader>
                         <CCardBody>
                             <CDataTable
-                                items={clients}
+                                items={users}
                                 fields={fields}
                                 tableFilter
                                 sorter
@@ -76,16 +83,16 @@ const ListClients = () => {
                                 pagination
                                 scopedSlots={{
                                     'edit':
-                                        (client) => {
+                                        (user) => {
                                             return (
                                                 <td className="py-2 d-flex">
-                                                    <CLink to={"/users/edit/".concat(client.user_id)}>
+                                                    <CLink to={"/users/edit/".concat(user.id)}>
                                                         <CButton color="primary" shape="pill" size="sm">
                                                             edit
                                                         </CButton>
                                                     </CLink>
                                                     <CButton color="danger" shape="pill" size="sm" className="ml-1"
-                                                             onClick={() => deleteUser(client.user_id)}>
+                                                             onClick={() => deleteUser(user.id)}>
                                                         Delete
                                                     </CButton>
                                                 </td>
@@ -101,4 +108,4 @@ const ListClients = () => {
     )
 }
 
-export default ListClients
+export default Users

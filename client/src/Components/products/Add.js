@@ -1,25 +1,23 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { HashRouter as Router, Route, Switch, Link } from 'react-router-dom'
 
-const InputProduct = () => {
+const Add = () => {
 
-    const [product_ref, setProduct_ref] = useState("");
-    const [product_name, setProduct_name] = useState("");
-    const [product_price, setProduct_price] = useState("");
+    const [reference, setReference] = useState("");
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState("");
     const [category_id, setCategory_id] = useState("");
     const [categories, setCategories] = useState([]);
-    console.log(category_id)
+  
     // New product
     const onSubmitForm = async (e) => {
         e.preventDefault();
         try {
-            const body = { product_ref, product_name, category_id, product_price };
-            fetch("http://localhost:5000/product", {
+            fetch("http://localhost:5000/products", {
                 method: "POST",
                 headers: { "content-Type": "application/json" },
-                body: JSON.stringify(body)
+                body: JSON.stringify({ reference, name, category_id, price })
             });
-
             window.location = "/#/products";
 
         } catch (err) {
@@ -28,7 +26,7 @@ const InputProduct = () => {
     }
 
     // Categories list
-    const getCategory = async () => {
+    const getCategories = async () => {
         try {
             const response = await fetch("http://localhost:5000/categories");
             const jsonData = await response.json();
@@ -40,7 +38,7 @@ const InputProduct = () => {
     }
 
     useEffect(() => {
-        getCategory()
+        getCategories()
     }, [])
 
 
@@ -56,8 +54,8 @@ const InputProduct = () => {
                         className="form-control mb-2"
                         placeholder="Please put the Ref"
                         required
-                        value={product_ref}
-                        onChange={e => setProduct_ref(e.target.value)}
+                        value={reference}
+                        onChange={e => setReference(e.target.value)}
                     />
                 </div>
                 <div className="form-group">
@@ -67,8 +65,8 @@ const InputProduct = () => {
                         className="form-control mb-2"
                         placeholder="Please put the Name"
                         required
-                        value={product_name}
-                        onChange={e => setProduct_name(e.target.value)}
+                        value={name}
+                        onChange={e => setName(e.target.value)}
                     />
                 </div>
                 <div className="form-group">
@@ -81,7 +79,7 @@ const InputProduct = () => {
                     >
                         <option selected disabled value="">Open this select menu</option>
                         {categories.map(category => (
-                            <option key={category.category_id} value={category.category_id} >{category.category}</option>
+                            <option key={category.id} value={category.id} >{category.name}</option>
 
                         ))}
                     </select>
@@ -96,8 +94,8 @@ const InputProduct = () => {
                         className="form-control mb-2"
                         placeholder="Please put the price"
                         required
-                        value={product_price}
-                        onChange={e => setProduct_price(e.target.value)}
+                        value={price}
+                        onChange={e => setPrice(e.target.value)}
                     />
                 </div>
                 <button type="submit" className="mt-2 btn btn-success">Save</button>
@@ -106,4 +104,4 @@ const InputProduct = () => {
     )
 }
 
-export default InputProduct
+export default Add

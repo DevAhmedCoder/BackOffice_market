@@ -23,7 +23,7 @@ exports.create = async (req, res) => {
 // find all users
 exports.findAll = async (req, res) => {
     try {
-        const allUsers = await pool.query("SELECT * FROM users ORDER BY user_id");
+        const allUsers = await pool.query("SELECT * FROM users ORDER BY id");
         res.json(allUsers.rows);
     } catch (err) {
         console.error(err.message);
@@ -34,7 +34,7 @@ exports.findAll = async (req, res) => {
 exports.findById = async (req, res) => {
     try {
         const {id} = req.params;
-        const oneUsers = await pool.query("SELECT * FROM users WHERE user_id = $1", [id]);
+        const oneUsers = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
         res.json(oneUsers.rows);
     } catch (err) {
         console.error(err.message);
@@ -47,7 +47,7 @@ exports.update = async (req, res) => {
         const {id} = req.params;
         const {first_name, last_name, email, age} = req.body;
         await pool.query(
-            "UPDATE users SET first_name = $2, last_name = $3, email = $4, age = $5  WHERE user_id = $1",
+            "UPDATE users SET first_name = $2, last_name = $3, email = $4, age = $5  WHERE id = $1",
             [id, first_name, last_name, email, age]);
         res.json({
             success: true
@@ -66,7 +66,7 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
     try {
         const {id} = req.params;
-        await pool.query("DELETE FROM users WHERE user_id = $1", [id]);
+        await pool.query("DELETE FROM users WHERE id = $1", [id]);
         res.json("user was deleted !");
     } catch (err) {
         console.error(err.message)

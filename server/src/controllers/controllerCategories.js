@@ -3,12 +3,19 @@ const pool = require("../../config/db");
 // create a category
 exports.create = async (req, res) => {
     try {
-        const { category } = req.body;
-        const newCategory = await pool.query("INSERT INTO categories (category) VALUES ($1) RETURNING *", [category]);
-        res.json(newCategory.rows[0]);
-    }
-    catch (err) {
-        console.error(err.message)
+        const {name} = req.body;
+        await pool.query("INSERT INTO categories (name) VALUES ($1) RETURNING * ",
+            [name]);
+        res.json({
+            success: true
+        });
+    } catch (err) {
+        res.json(
+            {
+                success: false,
+                message: err.detail
+            });
+        console.error(err);
     }
 };
 
@@ -25,8 +32,8 @@ exports.findAll = async (req, res) => {
 // find Categories
 exports.findById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const oneCategories = await pool.query("SELECT * FROM categories WHERE category_id=$1", [id]);
+        const {id} = req.params;
+        const oneCategories = await pool.query("SELECT * FROM categories WHERE id=$1", [id]);
         res.json(oneCategories.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -36,23 +43,37 @@ exports.findById = async (req, res) => {
 // Update Categories
 exports.update = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { category_name } = req.body;
-        await pool.query("UPDATE categories SET category = $2  WHERE category_id = $1", [id, category_name]);
-        res.json("Category was update!");
+        const {id} = req.params;
+        const {name} = req.body;
+        await pool.query("UPDATE categories SET name = $2  WHERE id = $1", [id, name]);
+        res.json({
+            success: true
+        });
     } catch (err) {
-        console.error(err.message);
+        res.json(
+            {
+                success: false,
+                message: err.detail
+            });
+        console.error(err);
     }
 };
 
 // delete Categories
 exports.delete = async (req, res) => {
     try {
-        const { id } = req.params;
-        await pool.query("DELETE FROM categories WHERE category_id  = $1", [id]);
-        res.json("Category was deleted !");
-    }
-    catch (err) {
-        console.error(err.message)
+        const {id} = req.params;
+        await pool.query("DELETE FROM categories WHERE id  = $1", [id]);
+        res.json({
+            success: true,
+            message: "Category was deleted !"
+        });
+    } catch (err) {
+        res.json(
+            {
+                success: false,
+                message: err.detail
+            });
+        console.error(err);
     }
 };

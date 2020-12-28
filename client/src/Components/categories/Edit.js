@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { HashRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
-const EditCategories = (props) => {
+const Edit = (props) => {
 
     const category_id = props.match.params.id;
     const [category, setCategory] = useState('')
@@ -67,4 +67,4 @@ const EditCategories = (props) => {
         </Fragment>
     )
 }
-export default EditCategories
+export default Edit
