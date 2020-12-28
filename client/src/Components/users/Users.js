@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {CButton, CCard, CCardBody, CCardHeader, CCol, CDataTable, CLink, CRow} from "@coreui/react";
+import React, { useEffect, useState } from 'react';
+import { CButton, CCard, CCardBody, CCardHeader, CCol, CDataTable, CLink, CRow,CModal , CModalBody,CModalHeader,CModalFooter,CModalTitle } from "@coreui/react";
 
 const Users = () => {
 
-    const [users, setUsers] = useState([])
+    const [users, setUsers] = useState([]);
+    const [show, setShow] = useState(false);
+    const [userId, setUserId] = useState();
     // get users
     const getUsers = async () => {
         try {
@@ -20,7 +22,8 @@ const Users = () => {
             await fetch(`http://localhost:5000/users/${id}`, {
                 method: "DELETE"
             });
-            getUsers()
+            setShow(!show);
+            getUsers();
         } catch (err) {
             console.error(err.message)
         }
@@ -50,7 +53,7 @@ const Users = () => {
             {
                 key: 'edit',
                 label: 'Action',
-                _style: {width: '1%'},
+                _style: { width: '1%' },
                 sorter: false
             }
         ]
@@ -58,7 +61,7 @@ const Users = () => {
         <>
             <CRow>
                 <CLink to='/users/add'>
-                    <CButton color="primary" shape="pill" size="lg" className="mb-2">
+                    <CButton color="primary"  size="lg" className="mb-2">
                         <span>+</span> Add
                     </CButton>
                 </CLink>
@@ -87,14 +90,39 @@ const Users = () => {
                                             return (
                                                 <td className="py-2 d-flex">
                                                     <CLink to={"/users/edit/".concat(user.id)}>
-                                                        <CButton color="primary" shape="pill" size="sm">
-                                                            edit
+                                                        <CButton color="warning"  size="sm">
+                                                            Edit
                                                         </CButton>
                                                     </CLink>
-                                                    <CButton color="danger" shape="pill" size="sm" className="ml-1"
-                                                             onClick={() => deleteUser(user.id)}>
+                                                    <CButton color="danger" size="sm" className="ml-1"
+                                                        onClick={() => {setShow(!show);setUserId(user.id)}}>
                                                         Delete
                                                     </CButton>
+
+                                                    {/*  */}
+                                                
+                                                    <CModal
+                                                        show={show}
+                                                        onClose={() => setShow(!show)}
+                                                        color="danger"
+                                                    >
+                                                        <CModalHeader closeButton>
+                                                            <CModalTitle>Delete user</CModalTitle>
+                                                        </CModalHeader>
+                                                        <CModalBody>
+                                                            Are you sure ?
+                                                         </CModalBody>
+                                                        <CModalFooter>
+                                                            <CButton color="danger" onClick={() =>deleteUser(userId) }>Delete</CButton>{' '}
+                                                            <CButton color="secondary" 
+                                                            onClick={() => setShow(!show)}>Cancel</CButton>
+                                                        </CModalFooter>
+                                                    </CModal>
+
+
+
+
+
                                                 </td>
                                             )
                                         }

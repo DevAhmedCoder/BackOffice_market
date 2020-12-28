@@ -45,6 +45,7 @@ exports.update = async (req, res) => {
     try {
         const {id} = req.params;
         const {name} = req.body;
+        console.log(name);
         await pool.query("UPDATE categories SET name = $2  WHERE id = $1", [id, name]);
         res.json({
             success: true

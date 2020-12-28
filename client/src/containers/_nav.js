@@ -4,7 +4,7 @@ import CIcon from '@coreui/icons-react'
 const _nav =  [
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Client']
+    _children: ['Users']
   },
   {
     _tag: 'CSidebarNavItem',

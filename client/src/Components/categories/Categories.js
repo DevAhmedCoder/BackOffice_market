@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import {
     CButton, CCard,
     CCardBody, CCardHeader, CCol, CDataTable,
@@ -63,7 +63,7 @@ const Categories = () => {
     const fields = ['id', 'name', {
         key: 'edit',
         label: 'Action',
-        _style: {width: '1%'},
+        _style: { width: '1%' },
         sorter: false
     }];
 
@@ -71,7 +71,7 @@ const Categories = () => {
         <>
             <CRow>
                 <CLink to='/categories/add'>
-                    <CButton color="primary" shape="pill" size="lg" className="mb-2">
+                    <CButton color="primary" size="lg" className="mb-2">
                         <span>+</span> Add
                     </CButton>
                 </CLink>
@@ -100,12 +100,12 @@ const Categories = () => {
                                             return (
                                                 <td className="py-2 d-flex">
                                                     <CLink to={"/categories/edit/".concat(category.id)}>
-                                                        <CButton color="primary" shape="pill" size="sm">
-                                                            edit
+                                                        <CButton color="warning"  size="sm">
+                                                            Edit
                                                         </CButton>
                                                     </CLink>
-                                                    <CButton color="danger" shape="pill" size="sm" className="ml-1"
-                                                             onClick={() => deleteCategory(category.id)}>
+                                                    <CButton color="danger"  size="sm" className="ml-1"
+                                                        onClick={() => deleteCategory(category.id)}>
                                                         Delete
                                                     </CButton>
                                                     <CModal show={show} onClose={() => setShow(!show)} color="danger">
