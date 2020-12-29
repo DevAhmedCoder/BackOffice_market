@@ -3,19 +3,28 @@ const pool = require("../../config/db");
 // create a product
 exports.create = async (req, res) => {
     try {
-        const { product_ref, product_name, product_category, product_price } = req.body;
-        const newProduct = await pool.query("INSERT INTO product (product_ref, product_name, product_category, product_price) VALUES ($1, $2, $3, $4) RETURNING *", [product_ref, product_name, product_category, product_price]);
-        res.json(newProduct.rows[0]);
-    }
-    catch (err) {
-        console.error(err.message)
+        const {reference, name, category_id, price} = req.body;
+        await pool.query("INSERT INTO products (reference, name, category_id, price) VALUES ($1, $2, $3, $4) RETURNING *",
+            [reference, name, category_id, price]);
+        res.json({
+            success: true
+        });
+    } catch (err) {
+        res.json(
+            {
+                success: false,
+                message: err.detail
+            });
+        console.error(err);
     }
 };
 
 // find all products
 exports.findAll = async (req, res) => {
     try {
-        const allProduct = await pool.query("SELECT * FROM product");
+        const allProduct = await pool.query(
+            "SELECT products.id,products.name,products.price,products.reference,categories.name as category_name FROM products " +
+            "INNER JOIN categories on products.category_id = categories.id");
         res.json(allProduct.rows);
     } catch (err) {
         console.error(err.message);
@@ -25,8 +34,10 @@ exports.findAll = async (req, res) => {
 // find product
 exports.findById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const oneProduct = await pool.query("SELECT * FROM product WHERE product_id = $1", [id]);
+        const {id} = req.params;
+        const oneProduct = await pool.query(
+            "SELECT products.id,products.name,products.price,products.reference,products.category_id,categories.name as category_name FROM products " +
+            "INNER JOIN categories on products.category_id = categories.id WHERE products.id = $1", [id]);
         res.json(oneProduct.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -36,25 +47,58 @@ exports.findById = async (req, res) => {
 // Update
 exports.update = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { product_ref, product_name, product_category, product_price } = req.body;
+        const {id} = req.params;
+        const {reference, name, category_id, price} = req.body;
         await pool.query(
-            "UPDATE product SET product_ref = $2, product_name = $3, product_category = $4, product_price = $5  WHERE product_id = $1",
-            [id, product_ref, product_name, product_category, product_price]);
-        res.json("Product was update!");
+            "UPDATE products SET reference = $2, name = $3, category_id = $4, price = $5  WHERE id = $1",
+            [id, reference, name, category_id, price]);
+        res.json({
+            success: true
+        });
     } catch (err) {
-        console.error(err.message);
+        res.json(
+            {
+                success: false,
+                message: err.detail
+            });
+        console.error(err);
     }
 };
 
-// delete
+// delete by id
 exports.delete = async (req, res) => {
     try {
-        const { id } = req.params;
-        await pool.query("DELETE FROM product WHERE product_id = $1", [id]);
-        res.json("Product was deleted !");
+        const {id} = req.params;
+        await pool.query("DELETE FROM products WHERE id = $1", [id]);
+        res.json({
+            success: true,
+            message: "Product was deleted !"
+        });
+    } catch (err) {
+        res.json(
+            {
+                success: false,
+                message: err.detail
+            });
+        console.error(err);
     }
-    catch (err) {
-        console.error(err.message)
+};
+
+// delete by category id
+exports.deleteByCategoryId = async (req, res) => {
+    try {
+        const {id} = req.params;
+        await pool.query("DELETE FROM products WHERE category_id = $1", [id]);
+        res.json({
+            success: true,
+            message: "Product was deleted !"
+        });
+    } catch (err) {
+        res.json(
+            {
+                success: false,
+                message: err.detail
+            });
+        console.error(err);
     }
 };
