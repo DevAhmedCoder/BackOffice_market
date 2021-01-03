@@ -3,28 +3,19 @@ const pool = require("../../config/db");
 // create a product
 exports.create = async (req, res) => {
     try {
-        const {reference, name, category_id, price} = req.body;
-        await pool.query("INSERT INTO products (reference, name, category_id, price) VALUES ($1, $2, $3, $4) RETURNING *",
-            [reference, name, category_id, price]);
-        res.json({
-            success: true
-        });
-    } catch (err) {
-        res.json(
-            {
-                success: false,
-                message: err.detail
-            });
-        console.error(err);
+        const { ref, name, category, price } = req.body;
+        const newProduct = await pool.query("INSERT INTO products (ref, name, category, price) VALUES ($1, $2, $3, $4) RETURNING *", [ref, name, category, price]);
+        res.json(newProduct.rows[0]);
+    }
+    catch (err) {
+        console.error(err.message)
     }
 };
 
 // find all products
 exports.findAll = async (req, res) => {
     try {
-        const allProduct = await pool.query(
-            "SELECT products.id,products.name,products.price,products.reference,categories.name as category_name FROM products " +
-            "INNER JOIN categories on products.category_id = categories.id");
+        const allProduct = await pool.query("SELECT * FROM products INNER JOIN categories on product.category = categories.id");
         res.json(allProduct.rows);
     } catch (err) {
         console.error(err.message);
@@ -34,10 +25,8 @@ exports.findAll = async (req, res) => {
 // find product
 exports.findById = async (req, res) => {
     try {
-        const {id} = req.params;
-        const oneProduct = await pool.query(
-            "SELECT products.id,products.name,products.price,products.reference,products.category_id,categories.name as category_name FROM products " +
-            "INNER JOIN categories on products.category_id = categories.id WHERE products.id = $1", [id]);
+        const { id } = req.params;
+        const oneProduct = await pool.query("SELECT * FROM products INNER JOIN categories on product.category = categories.id WHERE product_id = $1", [id]);
         res.json(oneProduct.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -47,58 +36,25 @@ exports.findById = async (req, res) => {
 // Update
 exports.update = async (req, res) => {
     try {
-        const {id} = req.params;
-        const {reference, name, category_id, price} = req.body;
+        const { id } = req.params;
+        const { ref, name, category, price } = req.body;
         await pool.query(
-            "UPDATE products SET reference = $2, name = $3, category_id = $4, price = $5  WHERE id = $1",
-            [id, reference, name, category_id, price]);
-        res.json({
-            success: true
-        });
+            "UPDATE products SET product_ref = $2, product_name = $3, product_category = $4, product_price = $5  WHERE product_id = $1",
+            [id, ref, name, category, price]);
+        res.json("Product was update!");
     } catch (err) {
-        res.json(
-            {
-                success: false,
-                message: err.detail
-            });
-        console.error(err);
+        console.error(err.message);
     }
 };
 
-// delete by id
+// delete
 exports.delete = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         await pool.query("DELETE FROM products WHERE id = $1", [id]);
-        res.json({
-            success: true,
-            message: "Product was deleted !"
-        });
-    } catch (err) {
-        res.json(
-            {
-                success: false,
-                message: err.detail
-            });
-        console.error(err);
+        res.json("Product was deleted !");
     }
-};
-
-// delete by category id
-exports.deleteByCategoryId = async (req, res) => {
-    try {
-        const {id} = req.params;
-        await pool.query("DELETE FROM products WHERE category_id = $1", [id]);
-        res.json({
-            success: true,
-            message: "Product was deleted !"
-        });
-    } catch (err) {
-        res.json(
-            {
-                success: false,
-                message: err.detail
-            });
-        console.error(err);
+    catch (err) {
+        console.error(err.message)
     }
 };

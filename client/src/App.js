@@ -1,39 +1,68 @@
-import React, { Component } from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
-import './scss/style.scss';
+import React from 'react';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import './App.css';
+import Sidebar from './Components/Sidebar/Sidebar';
 
-const loading = (
-    <div className="pt-3 text-center">
-      <div className="sk-spinner sk-spinner-pulse"></div>
+import Home from './Components/Home/Home';
+
+import ErrorPage from './Components/ErrorPage';
+
+import Products from './Components/Products';
+import InputProduct from './Components/Products/inputProduct';
+import EditProduct from './Components/Products/EditProduct';
+
+import Categories from './Components/Categories';
+import InputCategories from './Components/Categories/inputCategories';
+import EditCategories from './Components/Categories/EditCategories';
+
+import Users from './Components/Users';
+import InputUsers from './Components/Users/inputUsers';
+import EditUsers from './Components/Users/EditUsers';
+
+
+
+function App() {
+  return (
+    <div className="container-fluid ">
+      <Router>
+        <div className="row vh-100 " >
+          <Sidebar />
+          <div className="col   border container-fluid   " >
+            <div className="row " >
+
+              <div className=" vh-100" >
+                <Router>
+                  <Switch>
+
+                    <Route exact path='/' component={Home} />
+
+                    <Route exact path='/products' component={Products} />
+                    <Route path='/products/edit/:id' component={EditProduct} />
+                    <Route path='/products/input' component={InputProduct} />
+
+                    <Route exact path='/categories' component={Categories} />
+                    <Route path='/categories/input' component={InputCategories} />
+                    <Route path='/categories/edit/:id' component={EditCategories} />
+
+                    <Route exact path='/users' component={Users} />
+                    <Route path='/users/input' component={InputUsers} />
+                    <Route path='/users/edit/:id' component={EditUsers} />
+                   
+
+                    <Route component={ErrorPage} />
+                    
+                  </Switch>
+                </Router>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Router>
     </div>
-)
-
-// Containers
-const TheLayout = React.lazy(() => import('./containers/TheLayout'));
-
-// Pages
-// const Login = React.lazy(() => import('./views/pages/login/Login'));
-// const Register = React.lazy(() => import('./views/pages/register/Register'));
-const Page404 = React.lazy(() => import('./views/pages/page404/Page404'));
-const Page500 = React.lazy(() => import('./views/pages/page500/Page500'));
-
-class App extends Component {
-
-  render() {
-    return (
-        <HashRouter>
-          <React.Suspense fallback={loading}>
-            <Switch>
-              {/*<Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} />*/}
-              {/*<Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} />*/}
-              <Route exact path="/404" name="Page 404" render={props => <Page404 {...props}/>} />
-              <Route exact path="/500" name="Page 500" render={props => <Page500 {...props}/>} />
-              <Route path="/" name="Home" render={props => <TheLayout {...props}/>} />
-            </Switch>
-          </React.Suspense>
-        </HashRouter>
-    );
-  }
+  );
 }
 
 export default App;
+{/* <div className='container'>
+        
+      </div> */}
